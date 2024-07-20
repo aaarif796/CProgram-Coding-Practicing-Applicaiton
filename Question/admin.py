@@ -1,6 +1,6 @@
 # question/admin.py
 from django.contrib import admin
-from .models import Question, TestCase
+from .models import Question, TestCase,CodeSubmission
 
 class TestCaseInline(admin.TabularInline):
     model = TestCase
@@ -12,3 +12,4 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ('level', 'created_at')
 
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(CodeSubmission)
