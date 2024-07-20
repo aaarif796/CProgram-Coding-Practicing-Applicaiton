@@ -1,0 +1,68 @@
+<!-- templates/question_detail.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Question Details - {{ question.heading }}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <!-- CodeMirror CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <h2>{{ question.heading }}</h2>
+    <p>{{ question.describe }}</p>
+    <p><strong>Topics:</strong> {{ question.topics }}</p>
+    <p><strong>Level:</strong> {{ question.level }}</p>
+    <h3>Test Cases:</h3>
+    <pre>
+        {% for test_case in question.test_cases.all %}
+            {{ test_case.test_data }}
+        {% endfor %}
+    </pre>
+    <p><small>Posted on {{ question.created_at }}</small></p>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center">Code Editor</h1>
+                <form id="code-form" action="{% url 'Question:compile_and_run' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="question_id" value="{{ question.pk }}">
+                    <div class="form-group">
+                        <label for="code-editor">Code:</label>
+                        <textarea id="code-editor" name="code" class="form-control">{% if code %}{{ code|safe }}{% endif %}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Compile and Run</button>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h2 class="text-center">Output</h2>
+                <div id="output" class="border p-3" style="min-height: 150px;">
+                    {% if output %}
+                        <pre>{{ output }}</pre>
+                    {% elif error %}
+                        <pre>{{ error }}</pre>
+                    {% else %}
+                        <pre>No output received</pre>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/clike/clike.min.js"></script>
+    <script>
+        // Initialize CodeMirror
+        var editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            lineNumbers: true,
+            mode: 'text/x-csrc',
+            theme: 'default'
+        });
+    </script>
+{% endblock %}

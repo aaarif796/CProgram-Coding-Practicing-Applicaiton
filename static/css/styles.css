@@ -1,0 +1,96 @@
+/* CProgram/static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+header h1 {
+    margin: 0;
+    padding: 0 20px;
+}
+
+header nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+header nav ul li a:hover {
+    background-color: #575757;
+    border-radius: 5px;
+}
+
+main {
+    padding: 20px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Example CSS for code editor layout */
+.code-editor {
+    display: flex;
+    font-family: monospace; /* Ensures consistent spacing */
+}
+
+.code-lines {
+    width: 40px; /* Width of line numbers column */
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-right: 1px solid #ccc;
+    text-align: right;
+    box-sizing: border-box; /* Ensures padding doesn't increase width */
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow-y: scroll; /* Allow scrolling if textarea exceeds height */
+}
+
+.code-lines div {
+    margin-bottom: 1em;
+}
+
+.code-input-container {
+    flex: 1;
+    position: relative; /* Positioning context for line numbers */
+    margin-left: 40px; /* Adjust for the line numbers column */
+}
+
+.code-input {
+    width: 100%; /* Fill remaining space in flex container */
+    height: 250px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    resize: vertical; /* Allow vertical resizing of textarea */
+    box-sizing: border-box; /* Ensures padding doesn't increase width */
+    font-family: inherit; /* Inherit font-family for monospace effect */
+    font-size: inherit; /* Inherit font-size for consistent styling */
+    line-height: inherit; /* Inherit line-height for consistent spacing */
+}

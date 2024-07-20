@@ -1,0 +1,47 @@
+{% load static %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2>Welcome to Let's Code</h2>
+    
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center">Code Editor</h1>
+                <form id="code-form" action="/compile-and-run/" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="code-editor">Code:</label>
+                        <textarea id="code-editor" name="code" class="form-control">{% if code %}{{ code|safe }}{% endif %}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Compile and Run</button>
+                </form>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h2 class="text-center">Output</h2>
+                <div id="output" class="border p-3" style="min-height: 150px;">
+                    {% if output %}
+                        <pre>{{ output }}</pre>
+                    {% endif %}
+                    {% if error %}
+                        <pre>{{ error }}</pre>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize CodeMirror
+        var editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            lineNumbers: true,
+            mode: 'text/x-csrc',
+            theme: 'default'
+        });
+    </script>
+{% endblock %}

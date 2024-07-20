@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Let's Code{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h2>Welcome to Let's Code</h2>
+    <p>This is the home page content.</p>
+    <form id="code-form" action="/compile-and-run/" method="post">
+        {% csrf_token %}
+        <!-- Code input with line numbers -->
+        <textarea id="code-input" name="code" rows="10" cols="80" placeholder="Enter your C code here"></textarea><br><br>
+        <button type="submit">Compile and Run</button><br><br>
+    </form>
+    
+    {% if output %}
+        <div id="output">
+            <h3>Output:</h3>
+            <pre>{{ output }}</pre>
+        </div>
+    {% endif %}
+    
+    {% if error %}
+        <div id="error">
+            <h3>Error:</h3>
+            <pre>{{ error }}</pre>
+        </div>
+    {% endif %}
+{% endblock %}

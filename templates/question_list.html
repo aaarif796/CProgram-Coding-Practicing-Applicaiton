@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Questions{% endblock %}
+
+{% block content %}
+<h2>Questions</h2>
+<ul>
+    {% for question in questions %}
+    <li>
+        <a href="{% url 'Question:question_detail' question.question_id %}">{{ question.heading }}</a>
+        (Level: {{ question.level }})
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
