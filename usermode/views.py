@@ -20,6 +20,9 @@ def register_view(request):
     return render(request, 'register.html', {'form': form})
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('Question:question_list')
+    
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -28,9 +31,9 @@ def login_view(request):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('Question:question_list')  # Ensure this URL is correctly set up
+                return redirect('Question:question_list')
             else:
                 messages.error(request, 'Invalid email or password')
     else:
         form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'index.html', {'form': form})

@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from Question import views 
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from usermode import views as usermode_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('usermode/', include('usermode.urls', namespace='usermode')),
     path('questions/', include('Question.urls', namespace='Question')),  
-    path('', lambda request: redirect('usermode:login'), name='home'),  
+    # path('', lambda request: redirect('usermode:login'), name='home'),
+    path('', usermode_views.login_view, name='home'),
 ]

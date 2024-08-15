@@ -1,15 +1,35 @@
+
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% load static %}
+
 {% block title %}Questions{% endblock %}
 
 {% block content %}
-<h2>Questions</h2>
-<ul>
-    {% for question in questions %}
-    <li>
-        <a href="{% url 'Question:question_detail' question.question_id %}">{{ question.heading }}</a>
-        (Level: {{ question.level }})
-    </li>
-    {% endfor %}
-</ul>
+<div class="container mt-5">
+    <h2 class="mb-4">Questions</h2>
+    <div class="list-group">
+        {% for question in questions %}
+        <a href="{% url 'Question:question_detail' question.question_id %}" class="list-group-item list-group-item-action">
+            <h5 class="mb-1">{{ question.heading }}</h5>
+            <p class="mb-1">Level: {{ question.level }}</p>
+            <p class="mb-1">
+                Status:
+                {% with question_status|get_item:question.question_id as status %}
+                    <!-- Display the value of the status variable for debugging -->
+                    <strong>{{ status }}</strong> 
+                    
+                    {% if status == 'Completed' %}
+                        <span class="badge bg-success">Completed</span>
+                    {% elif status == 'Not Completed' %}
+                        <span class="badge bg-secondary">Not Completed</span>
+                    {% else %}
+                        <span class="badge bg-warning">Not Attempted</span>
+                    {% endif %}
+                {% endwith %}
+            </p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,13 @@
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Question Index{% endblock %}
+
+{% block content %}
+    <h2>Question List</h2>
+    <ul>
+        {% for question in questions %}
+            <li><a href="{% url 'question_detail' question.question_id %}">{{ question.heading }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,6 +1,7 @@
 # Question/views.py
 from django.shortcuts import render, get_object_or_404
 from .models import Question, TestCase, CodeSubmission
+
 import subprocess
 import os
 import tempfile
@@ -21,12 +22,53 @@ def extract_test_cases(test_cases):
 @login_required
 def question_list(request):
     questions = Question.objects.all()
-    return render(request, 'question_list.html', {'questions': questions})
+    question_status = {}
+
+    for question in questions:
+        # Fetch the most recent submission by the user for the current question
+        last_submission = CodeSubmission.objects.filter(user=request.user, question=question).order_by('-submitted_at').first()
+        
+        if last_submission:
+            # Get all test cases for the question
+            test_cases = question.test_cases.all()
+            total_cases = test_cases.count()
+            # Count how many test cases were passed in the latest submission
+            passed_cases = CodeSubmission.objects.filter(
+                user=request.user,
+                question=question,
+                test_case_pass=True
+            ).count()
+
+            # Compare passed cases with total cases
+            if passed_cases >= total_cases:
+                question_status[question.question_id] = 'Completed'
+            else:
+                question_status[question.question_id] = 'Not Completed'
+        else:
+            question_status[question.question_id] = 'Not Attempted'
+    print(question_status)
+    return render(request, 'question_list.html', {'questions': questions, 'question_status': question_status})
+
 
 @login_required
 def question_detail(request, question_id):
+    # question = get_object_or_404(Question, question_id=question_id)
+    # user = request.user
+    # return render(request, 'question_detail.html', {'question': question})
     question = get_object_or_404(Question, question_id=question_id)
-    return render(request, 'question_detail.html', {'question': question})
+    user = request.user
+
+    # Fetch the most recent submission by the user for the current question
+    last_submission = CodeSubmission.objects.filter(user=user, question=question).order_by('-submitted_at').first()
+    
+    # Prepare context data
+    context = {
+        'question': question,
+        'last_submission': last_submission,  # Include the last submission data
+    }
+
+    return render(request, 'question_detail.html', context)
+
 
 @login_required
 def compile_and_run(request):
@@ -81,7 +123,7 @@ def compile_and_run(request):
                 question=question,
                 code=code,
                 test_case_pass=(score == len(test_cases) * max_score_per_case),
-                no_of_attempt=1,  # Update logic for attempts
+                no_of_attempt=CodeSubmission.objects.filter(user=request.user, question=question).count() + 1,  # Update logic for attempts
                 score=score
             )
 

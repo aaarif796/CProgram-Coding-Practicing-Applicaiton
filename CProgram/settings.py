@@ -89,7 +89,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 # Redirect URLs after login/logout (optional)
 LOGIN_REDIRECT_URL = 'home'  # Update with your actual home page URL name
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'home'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
