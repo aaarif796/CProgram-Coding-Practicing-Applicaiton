@@ -1,0 +1,17 @@
+/* CProgram/static/css/styles.css */
+body {
+    background-color: #f8f9fa; /* Light background for contrast */
+}
+
+.card {
+    border-radius: 10px; /* Rounded corners for the card */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Bootstrap primary color */
+    border-color: #007bff; /* Same color for the border */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

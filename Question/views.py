@@ -105,9 +105,11 @@ def compile_and_run(request):
             for case in test_cases:
                 try:
                     process = subprocess.Popen([exe_file_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                    output, error = process.communicate(input=case['input'])
-                    output = output.strip()
                     
+                    # Set a timeout for the execution
+                    output, error = process.communicate(input=case['input'], timeout=2)  # Set timeout to 2 seconds
+                    output = output.strip()
+
                     if error or process.returncode != 0:
                         outputs.append(f"Test Case Failed: Input: {case['input']}\nError: {error}\n")
                     elif output == case['expected_output']:
@@ -115,6 +117,9 @@ def compile_and_run(request):
                         score += max_score_per_case
                     else:
                         outputs.append(f"Test Case Failed: Input: {case['input']}\nExpected: {case['expected_output']}\nGot: {output}\n")
+                except subprocess.TimeoutExpired:
+                    process.kill()  # Kill the process if it exceeds the timeout
+                    outputs.append(f"Test Case Timeout: Input: {case['input']}\n")
                 except Exception as e:
                     outputs.append(f"Test Case Failed: Input: {case['input']}\nError: {str(e)}\n")
 
